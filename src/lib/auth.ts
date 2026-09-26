@@ -4,11 +4,21 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/db";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  basePath: "/api/auth",
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHub({
       clientId: process.env.GITHUB_CLIENT_ID ?? "",
       clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
+      profile(profile) {
+        return {
+          id: profile.id.toString(),
+          name: profile.name ?? profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+          githubLogin: profile.login,
+        }
+      }
     }),
   ],
   callbacks: {
@@ -24,17 +34,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           dbUser?.githubLogin ?? undefined;
       }
       return session;
-    },
-    async signIn({ user, account, profile }) {
-      if (account?.provider === "github" && profile?.login) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { githubLogin: profile.login as string },
-        }).catch(() => {
-          // User may not exist yet on first sign-in — adapter handles creation
-        });
-      }
-      return true;
     },
   },
   pages: {
