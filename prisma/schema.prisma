@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  githubLogin   String?
+  accounts      Account[]
+  sessions      Session[]
+  repositories  Repository[]
+  contracts     ArchitecturalContract[]
+  reviews       PullRequestReview[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Repository {
+  id          String   @id @default(cuid())
+  name        String
+  fullName    String
+  description String?
+  isDemo      Boolean  @default(false)
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contracts ArchitecturalContract[]
+
+  @@unique([userId, fullName])
+}
+
+model ArchitecturalContract {
+  id          String   @id @default(cuid())
+  feature     String
+  description String
+  status      String   @default("active") // active | verified | drift_detected
+  contractJson String
+  repoId      String
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  repository Repository         @relation(fields: [repoId], references: [id], onDelete: Cascade)
+  user       User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviews    PullRequestReview[]
+}
+
+model PullRequestReview {
+  id           String   @id @default(cuid())
+  prNumber     Int
+  prTitle      String
+  prUrl        String?
+  status       String   @default("pending") // pending | reviewed | verified
+  contractId   String
+  userId       String
+  reviewJson   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  contract ArchitecturalContract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  user     User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  findings ReviewFinding[]
+}
+
+model ReviewFinding {
+  id          String   @id @default(cuid())
+  reviewId    String
+  type        String   // drift | blast_radius | verification | compliance
+  severity    String   // high | medium | low | info
+  title       String
+  description String
+  filePath    String?
+  lineNumber  Int?
+  suggestion  String?
+  createdAt   DateTime @default(now())
+
+  review PullRequestReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+}
