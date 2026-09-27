@@ -71,12 +71,34 @@ export default function ReviewPage() {
   }, [owner, repo, prNumber, contractId]);
 
   async function exportDossier() {
-    await fetch(`/api/repositories/${owner}/${repo}/export-dossier`, {
+    const res = await fetch(`/api/repositories/${owner}/${repo}/export-dossier`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prNumber: Number(prNumber), contractId }),
     });
-    setDossierExported(true);
+    
+    if (res.ok) {
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      
+      const disposition = res.headers.get("Content-Disposition");
+      let filename = "review-dossier.md";
+      if (disposition && disposition.includes("filename=")) {
+        const matches = /filename="([^"]+)"/.exec(disposition);
+        if (matches != null && matches[1]) {
+          filename = matches[1];
+        }
+      }
+      
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+      setDossierExported(true);
+    }
   }
 
   const alignmentColor = !review
@@ -386,7 +408,7 @@ export default function ReviewPage() {
               Export Dossier
             </button>
             {dossierExported && (
-              <span className="text-xs text-[#3fb950]">✓ Saved to .loopr/reviews/</span>
+              <span className="text-xs text-[#3fb950]">✓ Downloaded successfully</span>
             )}
             <Link
               href={`${base}/pull-requests`}
