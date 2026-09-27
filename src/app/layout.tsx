@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "Bob IntentLoop",
+  title: "LooPR",
   description:
     "Keep architecture and implementation aligned. Design with Bob.",
 };
