@@ -88,14 +88,13 @@ async function callLLM(systemPrompt: string, userPrompt: string): Promise<string
   );
 }
 
-async function callWatsonx(
-  systemPrompt: string,
-  userPrompt: string,
-  apiKey: string,
-  projectId: string,
-  baseUrl: string
-): Promise<string> {
-  // Get IAM token
+let cachedIamToken: { token: string; expiresAt: number } | null = null;
+
+async function getIamToken(apiKey: string): Promise<string> {
+  const now = Date.now();
+  if (cachedIamToken && cachedIamToken.expiresAt > now + 60_000) {
+    return cachedIamToken.token;
+  }
   const iamRes = await fetch("https://iam.cloud.ibm.com/identity/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -104,8 +103,24 @@ async function callWatsonx(
   if (!iamRes.ok) {
     throw new Error(`IBM IAM token error: ${await iamRes.text()}`);
   }
-  const iamData = await iamRes.json() as { access_token: string };
+  const iamData = (await iamRes.json()) as { access_token: string; expires_in?: number };
+  cachedIamToken = {
+    token: iamData.access_token,
+    expiresAt: now + (iamData.expires_in ? iamData.expires_in * 1000 : 3600_000),
+  };
+  return cachedIamToken.token;
+}
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function callWatsonx(
+  systemPrompt: string,
+  userPrompt: string,
+  apiKey: string,
+  projectId: string,
+  baseUrl: string
+): Promise<string> {
+  const token = await getIamToken(apiKey);
   const model = process.env.WATSONX_MODEL ?? "meta-llama/llama-3-3-70b-instruct";
 
   const body = {
@@ -121,22 +136,37 @@ async function callWatsonx(
     },
   };
 
-  const res = await fetch(
-    `${baseUrl}/ml/v1/text/chat?version=2024-05-01`,
-    {
+  const maxRetries = 5;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const res = await fetch(`${baseUrl}/ml/v1/text/chat?version=2024-05-01`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${iamData.access_token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(body),
+    });
+
+    if (res.status === 429) {
+      if (attempt < maxRetries) {
+        const delay = 1500 * Math.pow(1.5, attempt);
+        console.warn(
+          `[Watsonx] Rate limited (429). Retrying in ${Math.round(delay)}ms (attempt ${attempt + 1}/${maxRetries})...`
+        );
+        await sleep(delay);
+        continue;
+      }
     }
-  );
-  if (!res.ok) {
-    throw new Error(`Watsonx API error: ${await res.text()}`);
+
+    if (!res.ok) {
+      throw new Error(`Watsonx API error: ${await res.text()}`);
+    }
+
+    const data = (await res.json()) as { choices: { message: { content: string } }[] };
+    return data.choices[0].message.content;
   }
-  const data = await res.json() as { choices: { message: { content: string } }[] };
-  return data.choices[0].message.content;
+
+  throw new Error("Watsonx API error: Exceeded maximum retries for rate limits.");
 }
 
 async function callOpenAICompatible(
@@ -425,12 +455,10 @@ export async function runFullReview(
   prDiff: string,
   prFiles: string[]
 ): Promise<ReviewResult> {
-  const [audit, blast, verification, archComparison] = await Promise.all([
-    runIntentAudit(contractJson, prDiff),
-    runBlastRadiusAnalysis(prFiles, contractJson),
-    runVerification(contractJson, prDiff),
-    buildArchitectureComparison(contractJson, prDiff),
-  ]);
+  const audit = await runIntentAudit(contractJson, prDiff);
+  const blast = await runBlastRadiusAnalysis(prFiles, contractJson);
+  const verification = await runVerification(contractJson, prDiff);
+  const archComparison = await buildArchitectureComparison(contractJson, prDiff);
 
   return {
     prNumber: 0, // patched by the API route with the real PR number
