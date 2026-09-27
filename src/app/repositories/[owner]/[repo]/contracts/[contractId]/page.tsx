@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { ContractActions } from "./actions";
+import { ExportContractButton } from "./export-button";
 
 const statusConfig: Record<string, { label: string; color: string; textColor: string }> = {
   active: { label: "ACTIVE CONTRACT", color: "text-[#58a6ff] bg-blue-900/30 border-blue-800/40", textColor: "text-[#58a6ff]" },
@@ -72,7 +73,18 @@ export default async function ContractDetailPage({
             <span className={`px-3 py-1 rounded border text-sm font-mono ${cfg.color}`}>
               ● {cfg.label}
             </span>
-            <ContractActions owner={owner} repo={repo} contractId={contract.id} />
+            <div className="flex items-center gap-2">
+              <ExportContractButton
+                contract={{
+                  id: contract.id,
+                  feature: contract.feature,
+                  status: contract.status,
+                  createdAt: contract.createdAt.toISOString(),
+                  contractJson: contract.contractJson,
+                }}
+              />
+              <ContractActions owner={owner} repo={repo} contractId={contract.id} />
+            </div>
           </div>
         </div>
 
