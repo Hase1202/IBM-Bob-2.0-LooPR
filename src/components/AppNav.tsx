@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 
 interface NavProps {
@@ -37,6 +37,7 @@ const TAB_ICONS: Record<string, React.ReactNode> = {
 export function AppNav({ repoName, repoId, isDemo }: NavProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmSignOut, setConfirmSignOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -97,6 +98,18 @@ export function AppNav({ repoName, repoId, isDemo }: NavProps) {
               <span className="text-blue-800/50 flex-shrink-0">/</span>
               <span className="text-xs text-[#6b80a8] font-mono truncate max-w-[160px] md:max-w-[260px]">{repoName}</span>
             </div>
+          )}
+
+          {pathname !== "/dashboard" && !pathname.includes("/dashboard?demo=true") && (
+            <button
+              onClick={() => router.back()}
+              className="ml-1 flex items-center justify-center w-6 h-6 rounded bg-blue-500/5 hover:bg-blue-500/20 text-blue-400 transition-colors border border-transparent hover:border-blue-500/30"
+              title="Go Back"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
           )}
 
           {isDemo && (
