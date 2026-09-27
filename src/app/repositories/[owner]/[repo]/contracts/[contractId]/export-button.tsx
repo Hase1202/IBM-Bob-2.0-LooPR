@@ -44,13 +44,13 @@ export function ExportContractButton({ contract }: { contract: ContractExportDat
     <div className="flex items-center gap-2">
       <button
         onClick={() => handleCopy("markdown")}
-        className="text-xs px-2.5 py-1.5 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] border border-[#30363d] transition-colors"
+        className="text-xs px-2.5 py-1.5 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] border border-[#30363d] transition-colors whitespace-nowrap"
       >
         {copied === "markdown" ? "✓ Copied MD" : "Copy as MD"}
       </button>
       <button
         onClick={() => handleDownload("json")}
-        className="text-xs px-2.5 py-1.5 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] border border-[#30363d] transition-colors"
+        className="text-xs px-2.5 py-1.5 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] border border-[#30363d] transition-colors whitespace-nowrap"
       >
         Export JSON
       </button>

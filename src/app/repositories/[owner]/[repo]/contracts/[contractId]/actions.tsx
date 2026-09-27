@@ -40,7 +40,7 @@ export function ContractActions({
       <button
         onClick={handleDelete}
         disabled={isDeleting}
-        className="px-3 py-1.5 rounded border border-[#f85149]/50 text-[#f85149] hover:bg-[#f85149]/10 text-sm font-medium transition-colors disabled:opacity-50"
+        className="px-3 py-1.5 rounded border border-[#f85149]/50 text-[#f85149] hover:bg-[#f85149]/10 text-sm font-medium transition-colors disabled:opacity-50 whitespace-nowrap"
       >
         {isDeleting ? "Deleting..." : "Delete Contract"}
       </button>
