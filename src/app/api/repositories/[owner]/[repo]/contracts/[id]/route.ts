@@ -17,7 +17,6 @@ export async function DELETE(
     await prisma.architecturalContract.delete({
       where: {
         id: id,
-        userId: session.user.id,
       },
     });
     return NextResponse.json({ success: true });
@@ -42,7 +41,6 @@ export async function PATCH(
     const contract = await prisma.architecturalContract.update({
       where: {
         id: id,
-        userId: session.user.id,
       },
       data: {
         ...(body.status && { status: body.status }),

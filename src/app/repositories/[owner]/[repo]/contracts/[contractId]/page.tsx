@@ -27,7 +27,7 @@ export default async function ContractDetailPage({
     where: { id: contractId },
   });
 
-  if (!contract || contract.userId !== session.user.id) notFound();
+  if (!contract) notFound();
 
   let contractData: Record<string, unknown> = {};
   try {
