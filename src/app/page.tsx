@@ -48,36 +48,22 @@ export default async function LandingPage() {
 
           {/* LEFT — ASCII Sphere */}
           <div className="flex flex-col items-center justify-center lg:w-1/2 flex-shrink-0">
-            {/* Glow behind sphere */}
             <div className="relative flex items-center justify-center">
+              {/* Ambient glow only — no box */}
               <div
                 className="absolute rounded-full pointer-events-none"
                 style={{
-                  width: "320px", height: "320px",
-                  background: "radial-gradient(ellipse, rgba(30,90,220,0.18) 0%, transparent 70%)",
+                  width: "480px", height: "480px",
+                  background: "radial-gradient(ellipse, rgba(30,90,220,0.14) 0%, transparent 68%)",
                 }}
                 aria-hidden
               />
-              {/* Glass frame */}
-              <div
-                className="relative rounded-2xl p-4 flex items-center justify-center"
-                style={{
-                  background: "rgba(5,10,30,0.55)",
-                  backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(43,127,255,0.20)",
-                  boxShadow: "0 0 40px rgba(30,80,220,0.15), inset 0 1px 0 rgba(255,255,255,0.04)",
-                }}
-              >
-                <AsciiSphere />
-              </div>
+              <AsciiSphere />
             </div>
 
-            {/* Caption beneath sphere */}
-            <div className="mt-4 text-center">
-              <p className="text-xs font-mono text-blue-500/50 tracking-widest uppercase">
-                intent · loop · PR
-              </p>
-            </div>
+            <p className="mt-3 text-xs font-mono text-blue-500/40 tracking-widest uppercase">
+              intent · loop · PR
+            </p>
           </div>
 
           {/* RIGHT — CTA content */}
