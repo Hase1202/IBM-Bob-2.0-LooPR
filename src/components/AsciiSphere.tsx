@@ -47,7 +47,19 @@ function makeParticle(theta: number, phi: number): Particle {
 function updateTarget(p: Particle, A: number, B: number) {
   const st = Math.sin(p.theta), ct = Math.cos(p.theta);
   const sp = Math.sin(p.phi),   cp = Math.cos(p.phi);
-  const bx = R * st * cp, by = R * st * sp, bz = R * ct;
+  
+  // Base sphere coordinates
+  let bx = st * cp;
+  let by = st * sp;
+  let bz = ct;
+  
+  // Transform to a prism (cube)
+  const max = Math.max(Math.abs(bx), Math.abs(by), Math.abs(bz));
+  const PRISM_R = R * 0.75;
+  bx = (bx / max) * PRISM_R;
+  by = (by / max) * PRISM_R;
+  bz = (bz / max) * PRISM_R;
+
   const cosA = Math.cos(A), sinA = Math.sin(A);
   const cosB = Math.cos(B), sinB = Math.sin(B);
   const y1 = by * cosA - bz * sinA;
@@ -55,9 +67,9 @@ function updateTarget(p: Particle, A: number, B: number) {
   p.tx = bx * cosB + z1 * sinB;
   p.tz = -bx * sinB + z1 * cosB;
   p.ty = y1;
-  p.nx = p.tx / R;
-  p.ny = p.ty / R;
-  p.nz = p.tz / R;
+  p.nx = p.tx / PRISM_R;
+  p.ny = p.ty / PRISM_R;
+  p.nz = p.tz / PRISM_R;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -227,7 +239,6 @@ export function AsciiSphere() {
         textShadow: "0 0 8px rgba(59,130,246,0.55)",
         minWidth:  `${WIDTH}ch`,
         minHeight: `${HEIGHT * 1.25}em`,
-        cursor: "crosshair",
         touchAction: "none",
       }}
     />

@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import { auth, signOut } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { DEMO_REPO } from "@/lib/demo/data";
@@ -83,12 +83,17 @@ export default async function DashboardPage({
                 Exit demo
               </Link>
             ) : (
-              <Link href="/api/auth/signout" className="flex items-center gap-1.5 text-xs text-[#6b80a8] hover:text-[#e0eaff] transition-colors px-2 py-1 rounded-lg hover:bg-blue-500/10">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Sign out
-              </Link>
+              <form action={async () => {
+                "use server";
+                await signOut({ redirectTo: "/" });
+              }}>
+                <button type="submit" className="flex items-center gap-1.5 text-xs text-[#6b80a8] hover:text-[#e0eaff] transition-colors px-2 py-1 rounded-lg hover:bg-blue-500/10">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Sign out
+                </button>
+              </form>
             )}
           </div>
         </div>
