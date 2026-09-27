@@ -35,8 +35,8 @@ export default async function ContractsPage({
   const fullName = `${owner}/${repo}`;
   const base = `/repositories/${owner}/${repo}`;
 
-  const repoRecord = await prisma.repository.findUnique({
-    where: { userId_fullName: { userId: session.user.id, fullName } },
+  const repoRecord = await prisma.repository.findFirst({
+    where: { fullName },
   });
 
   const contracts = repoRecord

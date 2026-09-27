@@ -21,11 +21,14 @@ export async function POST(
   }
 
   // Upsert the repository record
-  const repoRecord = await prisma.repository.upsert({
-    where: { userId_fullName: { userId: session.user.id, fullName } },
-    create: { name: repo, fullName, userId: session.user.id },
-    update: {},
+  let repoRecord = await prisma.repository.findFirst({
+    where: { fullName },
   });
+  if (!repoRecord) {
+    repoRecord = await prisma.repository.create({
+      data: { name: repo, fullName, userId: session.user.id },
+    });
+  }
 
   // Build the contract JSON
   const contractJson = JSON.stringify({

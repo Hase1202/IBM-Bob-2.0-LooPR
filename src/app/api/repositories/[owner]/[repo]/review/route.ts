@@ -63,8 +63,8 @@ export async function POST(
   // Persist review record
   try {
     const fullName = `${owner}/${repo}`;
-    const repoRecord = await prisma.repository.findUnique({
-      where: { userId_fullName: { userId: session.user.id, fullName } },
+    const repoRecord = await prisma.repository.findFirst({
+      where: { fullName },
     });
     if (repoRecord && contractId) {
       const review = await prisma.pullRequestReview.create({

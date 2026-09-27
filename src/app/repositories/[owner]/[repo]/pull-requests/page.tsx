@@ -27,8 +27,8 @@ export default async function PullRequestsPage({
     } catch { /* show empty */ }
   }
 
-  const repoRecord = await prisma.repository.findUnique({
-    where: { userId_fullName: { userId: session.user.id, fullName } },
+  const repoRecord = await prisma.repository.findFirst({
+    where: { fullName },
   });
   const contracts = repoRecord
     ? await prisma.architecturalContract.findMany({
