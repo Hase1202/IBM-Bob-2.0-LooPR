@@ -32,7 +32,7 @@ export default async function PullRequestsPage({
   });
   const contracts = repoRecord
     ? await prisma.architecturalContract.findMany({
-        where: { repoId: repoRecord.id, status: "active" },
+        where: { repoId: repoRecord.id },
         orderBy: { createdAt: "desc" },
       })
     : [];
@@ -94,7 +94,7 @@ export default async function PullRequestsPage({
                       style={{ background: "rgba(43,127,255,0.06)", border: "1px solid rgba(43,127,255,0.20)" }}
                     >
                       <div>
-                        <div className="text-xs text-[#6b80a8] font-mono mb-0.5">Active Architectural Contract</div>
+                        <div className="text-xs text-[#6b80a8] font-mono mb-0.5">Architectural Contract in use</div>
                         <Link
                           href={`${base}/contracts/${activeContract.id}`}
                           className="text-xs text-blue-400 hover:underline font-mono"
@@ -103,10 +103,14 @@ export default async function PullRequestsPage({
                         </Link>
                       </div>
                       <span
-                        className="text-xs font-mono px-2 py-0.5 rounded"
-                        style={{ color: "#60a5fa", background: "rgba(43,127,255,0.12)", border: "1px solid rgba(43,127,255,0.25)" }}
+                        className="text-xs font-mono px-2 py-0.5 rounded uppercase"
+                        style={{
+                          color: activeContract.status === 'drift_detected' ? '#f43f5e' : activeContract.status === 'verified' ? '#22d3a0' : '#60a5fa',
+                          background: activeContract.status === 'drift_detected' ? 'rgba(244,63,94,0.12)' : activeContract.status === 'verified' ? 'rgba(34,211,160,0.12)' : 'rgba(43,127,255,0.12)',
+                          border: `1px solid ${activeContract.status === 'drift_detected' ? 'rgba(244,63,94,0.25)' : activeContract.status === 'verified' ? 'rgba(34,211,160,0.25)' : 'rgba(43,127,255,0.25)'}`
+                        }}
                       >
-                        ● ACTIVE
+                        ● {activeContract.status.replace('_', ' ')}
                       </span>
                     </div>
                   )}
