@@ -81,9 +81,9 @@ export default function PlanPage() {
           <div className="flex items-center gap-3">
             <Link href="/demo/repositories/demo-ecommerce" className="flex items-center gap-2">
               <div className="w-7 h-7 rounded bg-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold text-xs">IL</span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7 C2 4.2 4.2 2 7 2 C9.8 2 12 4.2 12 7" stroke="white" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 7 C12 9.8 9.8 12 7 12" stroke="rgba(255,255,255,0.5)" strokeWidth="1.8" strokeLinecap="round"/><circle cx="7" cy="12" r="1.2" fill="white"/><path d="M10.5 5.5 L12 7 L13.5 5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </div>
-              <span className="font-semibold text-[#e6edf3] text-sm">IntentLoop</span>
+              <span className="font-semibold text-[#e6edf3] text-sm">LooPR</span>
             </Link>
             <span className="text-[#30363d]">/</span>
             <span className="text-sm text-[#8b949e]">ecommerce-platform</span>
