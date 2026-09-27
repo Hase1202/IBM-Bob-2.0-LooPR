@@ -24,6 +24,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      if (account && user.id) {
+        // NextAuth doesn't update existing accounts on sign in. We must manually update the token
+        // so that scopes like `repo` are applied when the user re-authenticates.
+        try {
+          await prisma.account.update({
+            where: {
+              provider_providerAccountId: {
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+              },
+            },
+            data: {
+              access_token: account.access_token,
+              refresh_token: account.refresh_token,
+              expires_at: account.expires_at,
+              scope: account.scope,
+            },
+          });
+        } catch (e) {
+          // Ignores if account doesn't exist yet (handled by adapter on first sign up)
+        }
+      }
+      return true;
+    },
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
