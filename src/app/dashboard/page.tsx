@@ -1,7 +1,9 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { DEMO_CONTRACTS, DEMO_REPO } from "@/lib/demo/data";
+import { DEMO_REPO } from "@/lib/demo/data";
+import { prisma } from "@/lib/db";
+import { getUserRepos } from "@/lib/github/octokit";
 
 export default async function DashboardPage({
   searchParams,
@@ -23,17 +25,21 @@ export default async function DashboardPage({
         session?.user?.name ??
         "developer";
 
-  const statusColors: Record<string, string> = {
-    active: "text-[#58a6ff] bg-blue-900/30 border-blue-800/50",
-    verified: "text-[#3fb950] bg-green-900/30 border-green-800/50",
-    drift_detected: "text-[#f85149] bg-red-900/30 border-red-800/50",
-  };
-
-  const statusLabels: Record<string, string> = {
-    active: "ACTIVE",
-    verified: "VERIFIED",
-    drift_detected: "DRIFT DETECTED",
-  };
+  // Fetch real repos when logged in
+  let repos: Awaited<ReturnType<typeof getUserRepos>> = [];
+  if (!isDemo && session?.user?.id) {
+    const account = await prisma.account.findFirst({
+      where: { userId: session.user.id, provider: "github" },
+      select: { access_token: true },
+    });
+    if (account?.access_token) {
+      try {
+        repos = await getUserRepos(account.access_token);
+      } catch {
+        // token expired or revoked — show empty state
+      }
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#0d1117]">
@@ -78,7 +84,7 @@ export default async function DashboardPage({
           {isDemo ? (
             <DemoRepoCard isDemo={true} />
           ) : (
-            <RealRepoSection />
+            <RealRepoSection repos={repos} />
           )}
         </div>
       </div>
@@ -119,17 +125,77 @@ function DemoRepoCard({ isDemo }: { isDemo: boolean }) {
   );
 }
 
-function RealRepoSection() {
+function RealRepoSection({
+  repos,
+}: {
+  repos: Awaited<ReturnType<typeof getUserRepos>>;
+}) {
+  if (repos.length === 0) {
+    return (
+      <div className="border border-[#30363d] rounded-lg bg-[#161b22] p-8 text-center">
+        <p className="text-[#8b949e] mb-4">No repositories found on your GitHub account.</p>
+        <p className="text-sm text-[#8b949e]">
+          Or{" "}
+          <Link href="/dashboard?demo=true" className="text-[#58a6ff] hover:underline">
+            try the demo
+          </Link>{" "}
+          to explore the full flow.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="border border-[#30363d] rounded-lg bg-[#161b22] p-8 text-center">
-      <p className="text-[#8b949e] mb-4">Connect your GitHub repositories to get started.</p>
-      <p className="text-sm text-[#8b949e]">
-        Or{" "}
-        <Link href="/dashboard?demo=true" className="text-[#58a6ff] hover:underline">
-          try the demo
-        </Link>{" "}
-        without GitHub credentials.
-      </p>
+    <div className="border border-[#30363d] rounded-lg bg-[#161b22] overflow-hidden divide-y divide-[#30363d]">
+      {repos.map((repo) => (
+        <Link
+          key={repo.id}
+          href={`/repositories/${repo.owner.login}/${repo.name}`}
+          className="flex items-center justify-between p-4 hover:bg-[#1c2128] transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-[#0d1117] border border-[#30363d] flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-[#58a6ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+              </svg>
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-medium text-[#e6edf3] group-hover:text-[#58a6ff] transition-colors truncate">
+                  {repo.full_name}
+                </span>
+                {repo.private && (
+                  <span className="px-1.5 py-0.5 rounded text-xs bg-[#0d1117] text-[#8b949e] border border-[#30363d] flex-shrink-0">
+                    private
+                  </span>
+                )}
+                {repo.fork && (
+                  <span className="px-1.5 py-0.5 rounded text-xs bg-[#0d1117] text-[#8b949e] border border-[#30363d] flex-shrink-0">
+                    fork
+                  </span>
+                )}
+              </div>
+              {repo.description && (
+                <p className="text-sm text-[#8b949e] truncate mt-0.5">{repo.description}</p>
+              )}
+              <div className="flex items-center gap-3 mt-1">
+                {repo.language && (
+                  <span className="text-xs text-[#8b949e]">{repo.language}</span>
+                )}
+                <span className="text-xs text-[#8b949e]">
+                  ★ {repo.stargazers_count}
+                </span>
+                <span className="text-xs text-[#8b949e]">
+                  Updated {new Date(repo.updated_at ?? "").toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          </div>
+          <svg className="w-4 h-4 text-[#8b949e] group-hover:text-[#58a6ff] transition-colors flex-shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
+      ))}
     </div>
   );
 }

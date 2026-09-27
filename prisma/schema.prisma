@@ -79,6 +79,7 @@ model ArchitecturalContract {
   description String
   status      String   @default("active") // active | verified | drift_detected
   contractJson String
+  notes       String?
   repoId      String
   userId      String
   createdAt   DateTime @default(now())
