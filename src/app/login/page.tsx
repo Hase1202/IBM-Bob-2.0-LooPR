@@ -2,6 +2,7 @@ import Link from "next/link";
 import { signIn } from "@/lib/auth";
 import { GlassShell } from "@/components/GlassShell";
 import { AsciiStream } from "@/components/AsciiStream";
+import { Logo } from "@/components/Logo";
 
 export default function LoginPage() {
   return (
@@ -10,16 +11,8 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="mb-8 flex items-center gap-3">
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center glow-blue animate-pulse-ring"
-            style={{
-              background: "linear-gradient(135deg, #1e5adc 0%, #0a2fa8 100%)",
-              border: "1px solid rgba(60,120,255,0.5)",
-            }}
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7 C2 4.2 4.2 2 7 2 C9.8 2 12 4.2 12 7" stroke="white" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 7 C12 9.8 9.8 12 7 12" stroke="rgba(255,255,255,0.5)" strokeWidth="1.8" strokeLinecap="round"/><circle cx="7" cy="12" r="1.2" fill="white"/><path d="M10.5 5.5 L12 7 L13.5 5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </div>
-          <span className="font-semibold text-[#e0eaff] tracking-wide">LooPR</span>
+          <Logo size={36} className="glow-blue" priority />
+          <span className="font-semibold text-[#e0eaff] tracking-wide text-lg">LooPR</span>
         </div>
 
         {/* Card */}

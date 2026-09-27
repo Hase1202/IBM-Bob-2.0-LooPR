@@ -3,6 +3,7 @@ import { auth, signIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { GlassShell } from "@/components/GlassShell";
 import { AsciiSphere } from "@/components/AsciiSphere";
+import { Logo } from "@/components/Logo";
 
 export default async function LandingPage() {
   const session = await auth();
@@ -15,17 +16,7 @@ export default async function LandingPage() {
         {/* ── Top nav ── */}
         <nav className="glass-nav px-6 flex items-center justify-between h-14 sticky top-0 z-50">
           <div className="flex items-center gap-2.5">
-            <div
-              className="w-7 h-7 rounded-lg flex items-center justify-center"
-              style={{ background: "linear-gradient(135deg,#1e5adc,#0a2fa8)", border: "1px solid rgba(60,120,255,0.45)" }}
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2 7C2 4.2 4.2 2 7 2c2.8 0 5 2.2 5 5" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-                <path d="M12 7c0 2.8-2.2 5-5 5" stroke="rgba(255,255,255,0.5)" strokeWidth="1.8" strokeLinecap="round"/>
-                <circle cx="7" cy="12" r="1.2" fill="white"/>
-                <path d="M10.5 5.5L12 7l1.5-1.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
+            <Logo size={28} priority />
             <span className="font-bold text-[#e0eaff] text-sm tracking-wide">LooPR</span>
           </div>
           <div className="flex items-center gap-3">

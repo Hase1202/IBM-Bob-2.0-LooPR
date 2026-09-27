@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   title: "LooPR",
   description:
     "Keep architecture and implementation aligned. Design with LooPR.",
+  icons: {
+    icon: [
+      { url: "/logo.png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({

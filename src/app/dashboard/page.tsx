@@ -8,6 +8,8 @@ import { GlassShell } from "@/components/GlassShell";
 import { AsciiStream } from "@/components/AsciiStream";
 import { RepoList } from "@/components/RepoList";
 
+import { Logo } from "@/components/Logo";
+
 export default async function DashboardPage({
   searchParams,
 }: {
@@ -50,20 +52,7 @@ export default async function DashboardPage({
         <div className="max-w-7xl mx-auto flex items-center justify-between h-14">
           <div className="flex items-center gap-3">
             <Link href={isDemo ? "/dashboard?demo=true" : "/dashboard"} className="flex items-center gap-2 group">
-              <div
-                className="w-7 h-7 rounded-lg flex items-center justify-center"
-                style={{
-                  background: "linear-gradient(135deg, #1e5adc 0%, #0a2fa8 100%)",
-                  border: "1px solid rgba(60,120,255,0.4)",
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7 C2 4.2 4.2 2 7 2 C9.8 2 12 4.2 12 7" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-                  <path d="M12 7 C12 9.8 9.8 12 7 12" stroke="rgba(255,255,255,0.5)" strokeWidth="1.8" strokeLinecap="round"/>
-                  <circle cx="7" cy="12" r="1.2" fill="white"/>
-                  <path d="M10.5 5.5 L12 7 L13.5 5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
+              <Logo size={28} priority />
               <span className="font-bold text-[#e0eaff] text-sm group-hover:text-blue-400 transition-colors tracking-wide">LooPR</span>
             </Link>
             {isDemo && (
