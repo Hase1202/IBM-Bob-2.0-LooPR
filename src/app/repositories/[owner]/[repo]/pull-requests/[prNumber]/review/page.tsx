@@ -103,6 +103,15 @@ export default function ReviewPage() {
             <span className="text-[#30363d]">/</span>
             <span className="text-[#e6edf3]">#{prNumber} Review</span>
           </div>
+          <Link
+            href={`${base}/pull-requests`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#21262d] hover:bg-[#30363d] text-[#c9d1d9] text-xs font-medium transition-colors border border-[#30363d]"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Go back to Pull Requests
+          </Link>
         </div>
       </nav>
 
@@ -111,7 +120,7 @@ export default function ReviewPage() {
         <div className="flex items-center justify-center min-h-[70vh]">
           <div className="text-center max-w-md">
             <div className="w-12 h-12 rounded-full border-2 border-[#58a6ff] border-t-transparent animate-spin mx-auto mb-6" />
-            <h2 className="text-lg font-semibold text-[#e6edf3] mb-6">Bob is analyzing...</h2>
+            <h2 className="text-lg font-semibold text-[#e6edf3] mb-6">LooPR is analyzing...</h2>
             <div className="space-y-2 text-left">
               {LOAD_STEPS.map((s, i) => (
                 <div key={s} className="flex items-center gap-3">
@@ -377,7 +386,7 @@ export default function ReviewPage() {
               Export Dossier
             </button>
             {dossierExported && (
-              <span className="text-xs text-[#3fb950]">✓ Saved to .bob/reviews/</span>
+              <span className="text-xs text-[#3fb950]">✓ Saved to .loopr/reviews/</span>
             )}
             <Link
               href={`${base}/pull-requests`}
@@ -389,7 +398,7 @@ export default function ReviewPage() {
 
           <div className="mt-10 pt-6 border-t border-[#30363d] text-center">
             <p className="text-[#8b949e] text-sm">
-              <strong className="text-[#e6edf3]">Bob IntentLoop</strong> — From design intent to verified implementation.
+              <strong className="text-[#e6edf3]">LooPR IntentLoop</strong> — From design intent to verified implementation.
             </p>
           </div>
         </div>

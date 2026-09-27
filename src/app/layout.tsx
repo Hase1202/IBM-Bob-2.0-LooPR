@@ -9,7 +9,7 @@ const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 export const metadata: Metadata = {
   title: "LooPR",
   description:
-    "Keep architecture and implementation aligned. Design with Bob.",
+    "Keep architecture and implementation aligned. Design with LooPR.",
 };
 
 export default function RootLayout({

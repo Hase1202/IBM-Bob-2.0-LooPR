@@ -88,7 +88,7 @@ export default async function LandingPage() {
             </h1>
 
             <p className="text-sm text-[#6b80a8] mb-8 leading-relaxed max-w-md">
-              Design architectural contracts with Bob. Ship the feature.
+              Design architectural contracts with LooPR. Ship the feature.
               LooPR reviews every pull request against what you originally agreed
               on — catching drift <span className="text-blue-400/80">before</span> it ships.
             </p>
@@ -148,7 +148,7 @@ export default async function LandingPage() {
             {[
               {
                 step: "01", title: "Define Contract",
-                desc: "Describe your feature intent. Bob generates an architectural contract capturing key design decisions.",
+                desc: "Describe your feature intent. LooPR generates an architectural contract capturing key design decisions.",
                 path: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
               },
               {
@@ -157,7 +157,7 @@ export default async function LandingPage() {
                 path: "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4",
               },
               {
-                step: "03", title: "Review With Bob",
+                step: "03", title: "Review With LooPR",
                 desc: "LooPR compares the PR diff against the contract. Drift is surfaced instantly with file-level detail.",
                 path: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4",
               },

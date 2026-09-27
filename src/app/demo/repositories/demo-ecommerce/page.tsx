@@ -116,7 +116,7 @@ export default function DemoRepoPage() {
               <span className="text-blue-400 text-lg font-mono text-glow-sm">+</span>
               <span className="font-medium text-[#e0eaff] group-hover:text-blue-400 transition-colors text-sm">Plan a new feature</span>
             </div>
-            <p className="text-xs text-[#6b80a8]">Let Bob analyze the architecture before you build.</p>
+            <p className="text-xs text-[#6b80a8]">Let LooPR analyze the architecture before you build.</p>
           </Link>
         </div>
       </div>

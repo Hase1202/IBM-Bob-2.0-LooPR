@@ -12,7 +12,7 @@ export async function POST() {
       DEMO_CONTRACT_FULL.featureLabel
     );
 
-    const outDir = path.join(process.cwd(), ".bob", "reviews");
+    const outDir = path.join(process.cwd(), ".loopr", "reviews");
     fs.mkdirSync(outDir, { recursive: true });
     fs.writeFileSync(
       path.join(outDir, "currency-cache-review.md"),
@@ -20,7 +20,7 @@ export async function POST() {
       "utf-8"
     );
 
-    return NextResponse.json({ ok: true, path: ".bob/reviews/currency-cache-review.md" });
+    return NextResponse.json({ ok: true, path: ".loopr/reviews/currency-cache-review.md" });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ ok: false }, { status: 500 });

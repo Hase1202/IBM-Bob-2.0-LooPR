@@ -47,10 +47,10 @@ export async function POST(
 
   const markdown = generateDossierMarkdown(reviewResult, contractLabel);
   const slug = contractLabel.toLowerCase().replace(/\s+/g, "-");
-  const outDir = path.join(process.cwd(), ".bob", "reviews");
+  const outDir = path.join(process.cwd(), ".loopr", "reviews");
   fs.mkdirSync(outDir, { recursive: true });
   const filename = `${slug}-pr${prNumber}-review.md`;
   fs.writeFileSync(path.join(outDir, filename), markdown, "utf-8");
 
-  return NextResponse.json({ ok: true, path: `.bob/reviews/${filename}` });
+  return NextResponse.json({ ok: true, path: `.loopr/reviews/${filename}` });
 }

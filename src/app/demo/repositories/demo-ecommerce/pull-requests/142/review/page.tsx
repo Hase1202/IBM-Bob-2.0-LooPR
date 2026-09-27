@@ -79,7 +79,7 @@ export default function ReviewPage() {
         <div className="flex items-center justify-center min-h-[70vh]">
           <div className="text-center max-w-md">
             <div className="w-12 h-12 rounded-full border-2 border-[#58a6ff] border-t-transparent animate-spin mx-auto mb-6" />
-            <h2 className="text-lg font-semibold text-[#e6edf3] mb-6">Bob is analyzing...</h2>
+            <h2 className="text-lg font-semibold text-[#e6edf3] mb-6">LooPR is analyzing...</h2>
             <div className="space-y-2 text-left">
               {LOAD_STEPS.map((s, i) => (
                 <div key={s} className="flex items-center gap-3">
@@ -252,7 +252,7 @@ export default function ReviewPage() {
               <div className="p-4 rounded-lg border border-[#d29922]/40 bg-yellow-900/10">
                 <p className="text-sm text-[#d29922]">
                   <strong>{review.blastRadius.unmodifiedFilesAtRisk}</strong> unmodified file(s) may be affected by changes in this PR.
-                  Bob scanned callers, consumers, imports, interfaces, and downstream services.
+                  LooPR scanned callers, consumers, imports, interfaces, and downstream services.
                 </p>
               </div>
 
@@ -423,7 +423,7 @@ export default function ReviewPage() {
               Export Dossier
             </button>
             {dossierExported && (
-              <span className="text-xs text-[#3fb950]">✓ Saved to .bob/reviews/currency-cache-review.md</span>
+              <span className="text-xs text-[#3fb950]">✓ Saved to .loopr/reviews/currency-cache-review.md</span>
             )}
             <Link
               href="/demo/repositories/demo-ecommerce/contracts/currency-cache"
@@ -442,7 +442,7 @@ export default function ReviewPage() {
           {/* Closer tagline */}
           <div className="mt-10 pt-6 border-t border-[#30363d] text-center">
             <p className="text-[#8b949e] text-sm">
-              <strong className="text-[#e6edf3]">Bob IntentLoop</strong> — From design intent to verified implementation.
+              <strong className="text-[#e6edf3]">LooPR IntentLoop</strong> — From design intent to verified implementation.
             </p>
           </div>
         </div>

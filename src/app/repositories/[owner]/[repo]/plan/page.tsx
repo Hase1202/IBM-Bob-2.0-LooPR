@@ -81,7 +81,7 @@ export default function PlanPage() {
           <div>
             <h1 className="text-2xl font-bold text-[#e6edf3] mb-2">Plan New Feature</h1>
             <p className="text-[#8b949e] mb-8">
-              Bob will analyze the repository and generate an architectural contract before you build.
+              LooPR will analyze the repository and generate an architectural contract before you build.
             </p>
             <div className="space-y-5">
               <div>
@@ -108,7 +108,7 @@ export default function PlanPage() {
                 disabled={!featureName.trim()}
                 className="w-full py-3 rounded-lg bg-[#238636] hover:bg-[#2ea043] text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Analyze Repository with Bob
+                Analyze Repository with LooPR
               </button>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function PlanPage() {
         {phase === "analyzing" && (
           <div>
             <h1 className="text-2xl font-bold text-[#e6edf3] mb-2">Analyzing repository...</h1>
-            <p className="text-[#8b949e] mb-8">Bob is examining the codebase for existing patterns and constraints.</p>
+            <p className="text-[#8b949e] mb-8">LooPR is examining the codebase for existing patterns and constraints.</p>
             <div className="p-6 rounded-lg border border-[#30363d] bg-[#161b22] space-y-3">
               {ANALYSIS_STEPS.map((step) => {
                 const done = completedSteps.includes(step.key);
@@ -208,7 +208,7 @@ export default function PlanPage() {
             <h1 className="text-2xl font-bold text-[#e6edf3] mb-2">Architectural Contract Created</h1>
             <p className="text-[#8b949e] mb-8">
               The contract for <strong className="text-[#e6edf3]">{featureName}</strong> is now active.
-              Bob will enforce it when reviewing the implementation PR.
+              LooPR will enforce it when reviewing the implementation PR.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               {contractId && (
