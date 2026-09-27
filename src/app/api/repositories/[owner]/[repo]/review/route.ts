@@ -44,18 +44,22 @@ export async function POST(
     console.error("GitHub fetch error:", e);
   }
 
-  // Load the contract if provided
+  // Load the contract + notes if provided
   let contractJson = "{}";
+  let contractNotes = "";
   if (contractId) {
     const contract = await prisma.architecturalContract.findUnique({
       where: { id: contractId },
-      select: { contractJson: true },
+      select: { contractJson: true, notes: true },
     });
-    if (contract) contractJson = contract.contractJson;
+    if (contract) {
+      contractJson = contract.contractJson;
+      contractNotes = contract.notes ?? "";
+    }
   }
 
-  // Run the review pipeline
-  const result = await runFullReview(contractJson, prDiff, prFiles);
+  // Run the real review pipeline with actual diff + contract notes
+  const result = await runFullReview(contractJson, prDiff, prFiles, contractNotes);
 
   // Patch in the real PR number/title
   const finalResult = { ...result, prNumber, prTitle };
