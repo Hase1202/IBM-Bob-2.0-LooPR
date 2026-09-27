@@ -80,7 +80,7 @@ export default async function ContractsPage({
                     </div>
                     <div className="text-xs text-[#6b80a8] mt-0.5">{contract.description}</div>
                   </div>
-                  <span className="px-2 py-0.5 rounded text-xs font-mono" style={cfg.colorStyle}>
+                  <span className="px-2 py-0.5 rounded text-xs font-mono shrink-0 whitespace-nowrap ml-4" style={cfg.colorStyle}>
                     {cfg.icon} {cfg.label}
                   </span>
                 </Link>
