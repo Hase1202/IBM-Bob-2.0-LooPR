@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
+import { ContractNotes } from "@/components/ContractNotes";
 
 const statusConfig: Record<string, { label: string; color: string; textColor: string }> = {
   active: { label: "ACTIVE CONTRACT", color: "text-[#58a6ff] bg-blue-900/30 border-blue-800/40", textColor: "text-[#58a6ff]" },
@@ -148,6 +149,13 @@ export default async function ContractDetailPage({
             </div>
           )}
         </div>
+
+        <ContractNotes
+          contractId={contractId}
+          owner={owner}
+          repo={repo}
+          initialNotes={contract.notes ?? ""}
+        />
 
         <div className="mt-6 flex gap-3">
           <Link
